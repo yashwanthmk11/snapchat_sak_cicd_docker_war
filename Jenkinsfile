@@ -108,7 +108,7 @@ pipeline {
                     echo "🧩 Checking if the Docker container is already running..."
                     // Check if container exists
                     def containerExists = sh(
-                        script: "sudo docker ps -a --format '{{.Names}}' | grep -w snapchat-container || true",
+                        script: "docker ps -a --format '{{.Names}}' | grep -w snapchat-container || true",
                         returnStdout: true
                     ).trim()
                     if (containerExists) {
@@ -125,14 +125,14 @@ pipeline {
                                 docker stop snapchat-container || true
                                 docker rm snapchat-container || true
                                 echo "🚀 Starting new container..."
-                                docker run -d -p 8084:8080 --name snapchat-container sakit333/snapchat-sak-cicd-docker:latest
+                                docker run -d -p 8084:8080 --name snapchat-container yashwanthmk/snapchat-sak-cicd-docker:latest
                             '''
                         } else {
                             echo "⏩ Skipping container restart as per user choice."
                         }
                     } else {
                         echo "🚀 No existing container found — starting new one..."
-                        sh 'docker run -d -p 8084:8080 --name snapchat-container sakit333/snapchat-sak-cicd-docker:latest'
+                        sh 'docker run -d -p 8084:8080 --name snapchat-container yashwanthmk/snapchat-sak-cicd-docker:latest'
                     }
                 }
             }
