@@ -22,7 +22,7 @@ pipeline {
         stage('Docker Build the Image') {
             steps {
                 echo "Building the Docker image..."
-                sh 'sudo docker build -t snapchat-sak-cicd-docker .'
+                sh 'docker build -t snapchat-sak-cicd-docker .'
             }
             post {
                 success {
@@ -49,7 +49,7 @@ pipeline {
         stage('Docker Tag the Image') {
             steps {
                 echo "Tagging the Docker image..."
-                sh 'sudo docker tag snapchat-sak-cicd-docker yashwanthmk/snapchat-sak-cicd-docker:latest'
+                sh 'docker tag snapchat-sak-cicd-docker yashwanthmk/snapchat-sak-cicd-docker:latest'
             }
             post {
                 success {
@@ -63,7 +63,7 @@ pipeline {
         stage('Docker Push the Image') {
             steps {
                 echo "Pushing the Docker image to DockerHub..."
-                sh 'sudo docker push yashwanthmk/snapchat-sak-cicd-docker:latest'
+                sh 'docker push yashwanthmk/snapchat-sak-cicd-docker:latest'
             }
             post {
                 success {
@@ -78,8 +78,8 @@ pipeline {
             steps {
                 echo "Cleaning up local Docker images..."
                 sh '''
-                    sudo docker rmi yashwanthmk/snapchat-sak-cicd-docker:latest
-                    sudo docker rmi snapchat-sak-cicd-docker
+                    docker rmi yashwanthmk/snapchat-sak-cicd-docker:latest
+                    docker rmi snapchat-sak-cicd-docker
                 '''
             }
             post {
@@ -99,7 +99,7 @@ pipeline {
         stage('Docker Logout from DockerHub') {
             steps {
                 echo "Logging out from DockerHub..."
-                sh 'sudo docker logout'
+                sh 'docker logout'
             }
         }
         stage('Docker container run') {
@@ -122,17 +122,17 @@ pipeline {
                         if (userChoice == 'Yes') {
                             echo "🛑 Stopping and removing old container..."
                             sh '''
-                                sudo docker stop snapchat-container || true
-                                sudo docker rm snapchat-container || true
+                                docker stop snapchat-container || true
+                                docker rm snapchat-container || true
                                 echo "🚀 Starting new container..."
-                                sudo docker run -d -p 8084:8080 --name snapchat-container sakit333/snapchat-sak-cicd-docker:latest
+                                docker run -d -p 8084:8080 --name snapchat-container sakit333/snapchat-sak-cicd-docker:latest
                             '''
                         } else {
                             echo "⏩ Skipping container restart as per user choice."
                         }
                     } else {
                         echo "🚀 No existing container found — starting new one..."
-                        sh 'sudo docker run -d -p 8084:8080 --name snapchat-container sakit333/snapchat-sak-cicd-docker:latest'
+                        sh 'docker run -d -p 8084:8080 --name snapchat-container sakit333/snapchat-sak-cicd-docker:latest'
                     }
                 }
             }
