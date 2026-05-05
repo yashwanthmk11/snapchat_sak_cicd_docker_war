@@ -41,7 +41,7 @@ pipeline {
                     passwordVariable: 'PASS'
                 )]) {
                     sh '''
-                        echo "$PASS" | sudo docker login -u "$USER" --password-stdin
+                        echo "$PASS" | docker login -u "$USER" --password-stdin
                     '''
                 }
             }
